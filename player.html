@@ -64,18 +64,16 @@
                                             <div class="player-ctrl-volume-number">
                                                 {{ Math.round(currentVolume * 10000) / 100 }}
                                             </div>
-                                            <div class="player-ctrl-volume-progress-area">
+                                            <div id="volumeProgressBar" class="player-ctrl-volume-progress-area"
+                                                @mousedown="dotMousedown($event)" @mouseup="clearDotMousemove($event)">
                                                 <div class="player-ctrl-volume-progress">
                                                     <div class="player-ctrl-volume-progress-bar player-ctrl-volume-progress-schedule"
-                                                        style="transform: scaleY(1);"
-                                                        @click.self="volumeJumpTo($event)"></div>
+                                                        style="transform: scaleY(1);"></div>
                                                     <div class="player-ctrl-volume-progress-bar player-ctrl-volume-progress-current"
-                                                        :style="{ transform: `scaleY(${currentVolume})` }"
-                                                        @click.self="volumeJumpTo($event)"></div>
+                                                        :style="{ transform: `scaleY(${currentVolume})` }"></div>
                                                     <div class="thumb-dot-box"
                                                         :style="{ transform: `translateY(${ (1 - currentVolume) * 100 + 'px'})` }">
-                                                        <div class="thumb-dot" @mousedown.self="dotMousedown($event)"
-                                                            @mouseup.self="clearDotMousemove($event)"></div>
+                                                        <div class="thumb-dot"></div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -215,34 +213,31 @@
             },
             progressJumpTo(event) {
                 const video = document.querySelector('#video')
-                video.currentTime = event.layerX / event.currentTarget.offsetWidth * this.duration
-            },
-            volumeJumpTo(event) {
-                const volume = (event.currentTarget.offsetHeight - event.layerY) / event.currentTarget.offsetHeight
-                if (volume >= 0 && volume <= 1) {
-                    const video = document.querySelector('#video')
-                    video.volume = volume
-                }
+                video.currentTime = event.offsetX / event.currentTarget.offsetWidth * this.duration
             },
             dotMousedown(event) {
-                event.currentTarget.onmousemove = (event) => {
-                    const progressBar = document.querySelector('.player-ctrl-volume-progress')
-                    const dot = document.querySelector('.thumb-dot')
-                    if (event.layerY <= progressBar.offsetHeight + dot.offsetHeight && event.layerY >= 0) {
-                        const volume = (progressBar.offsetHeight + dot.offsetHeight / 2 - event.layerY) / progressBar.offsetHeight
-                        if (volume >= 0 && volume <= 1) {
-                            const video = document.querySelector('#video')
-                            video.volume = volume
-                        }
+                const volumeProgressBar = document.querySelector('#volumeProgressBar')
+                const video = document.querySelector('#video')
+
+                const volume = (volumeProgressBar.offsetHeight - event.offsetY) / volumeProgressBar.offsetHeight
+                if (volume >= 0 && volume <= 1) {
+                    video.volume = volume
+                }
+
+                volumeProgressBar.onmousemove = (event) => {
+                    const volume = (volumeProgressBar.offsetHeight - event.offsetY) / volumeProgressBar.offsetHeight
+                    if (volume >= 0 && volume <= 1) {
+                        video.volume = volume
                     }
                 }
-                event.currentTarget.onmouseout = (event) => {
-                    this.clearDotMousemove(event)
+                volumeProgressBar.onmouseleave = (event) => {
+                    this.clearDotMousemove()
                 }
             },
-            clearDotMousemove(event) {
-                event.currentTarget.onmousemove = null
-                event.currentTarget.onmouseout = null
+            clearDotMousemove() {
+                const volumeProgressBar = document.querySelector('#volumeProgressBar')
+                volumeProgressBar.onmousemove = null
+                volumeProgressBar.onmouseleave = null
             },
             formatSeconds(seconds) {
                 seconds = parseInt(seconds)

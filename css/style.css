@@ -144,13 +144,16 @@ video::-webkit-media-controls {
 
 .player-progress-buffer {
     background-color: hsla(0, 0%, 100%, .3);
-    height: 100%;
-
 }
 
 .player-progress-current {
     background-color: var(--progress-curent-color, #00a1d6);
+}
+
+.player-progress-buffer,
+.player-progress-current {
     height: 100%;
+    pointer-events: none;
 }
 
 .player-progress-schedule,
@@ -222,18 +225,18 @@ video::-webkit-media-controls {
     width: 100%;
     flex: 1;
     margin-bottom: 10px;
+    cursor: pointer;
 }
 
 .player-ctrl-volume-progress {
     width: 2px;
     height: 100%;
     margin: 0 auto;
-
-    cursor: pointer;
     display: flex;
     justify-content: flex-start;
     vertical-align: middle;
     position: relative;
+    pointer-events: none;
 }
 
 .player-ctrl-volume-progress-bar {
