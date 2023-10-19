@@ -14,7 +14,6 @@ body {
 video {
     width: 100% !important;
     height: 100% !important;
-    object-fit: contain;
 }
 
 video::-webkit-media-controls {
@@ -51,6 +50,9 @@ video::-webkit-media-controls {
     position: relative;
     overflow: hidden;
     width: 100% !important;
+    max-width: 1214px;
+    max-height: 683px;
+    aspect-ratio: 16/9;
 }
 
 .video-container:after {
