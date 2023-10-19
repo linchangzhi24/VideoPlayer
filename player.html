@@ -219,13 +219,13 @@
                 const volumeProgressBar = document.querySelector('#volumeProgressBar')
                 const video = document.querySelector('#video')
 
-                const volume = (volumeProgressBar.offsetHeight - event.offsetY) / volumeProgressBar.offsetHeight
+                const volume = (1 - event.offsetY / volumeProgressBar.offsetHeight).toFixed(2)
                 if (volume >= 0 && volume <= 1) {
                     video.volume = volume
                 }
 
                 volumeProgressBar.onmousemove = (event) => {
-                    const volume = (volumeProgressBar.offsetHeight - event.offsetY) / volumeProgressBar.offsetHeight
+                    const volume = (1 - event.offsetY / volumeProgressBar.offsetHeight).toFixed(2)
                     if (volume >= 0 && volume <= 1) {
                         video.volume = volume
                     }
@@ -238,6 +238,11 @@
                 const volumeProgressBar = document.querySelector('#volumeProgressBar')
                 volumeProgressBar.onmousemove = null
                 volumeProgressBar.onmouseleave = null
+
+                const volume = (1 - event.offsetY / volumeProgressBar.offsetHeight).toFixed(2)
+                if (volume >= 0 && volume <= 1) {
+                    video.volume = volume
+                }
             },
             formatSeconds(seconds) {
                 seconds = parseInt(seconds)
