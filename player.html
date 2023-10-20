@@ -217,32 +217,34 @@
             },
             dotMousedown(event) {
                 const volumeProgressBar = document.querySelector('#volumeProgressBar')
-                const video = document.querySelector('#video')
-
+                
                 const volume = (1 - event.offsetY / volumeProgressBar.offsetHeight).toFixed(2)
-                if (volume >= 0 && volume <= 1) {
-                    video.volume = volume
-                }
+                this.setVideoVolume(volume)
 
                 volumeProgressBar.onmousemove = (event) => {
                     const volume = (1 - event.offsetY / volumeProgressBar.offsetHeight).toFixed(2)
-                    if (volume >= 0 && volume <= 1) {
-                        video.volume = volume
-                    }
+                    this.setVideoVolume(volume)
                 }
                 volumeProgressBar.onmouseleave = (event) => {
-                    this.clearDotMousemove()
+                    this.clearDotMousemove(event)
                 }
             },
-            clearDotMousemove() {
+            clearDotMousemove(event) {
                 const volumeProgressBar = document.querySelector('#volumeProgressBar')
                 volumeProgressBar.onmousemove = null
                 volumeProgressBar.onmouseleave = null
 
                 const volume = (1 - event.offsetY / volumeProgressBar.offsetHeight).toFixed(2)
-                if (volume >= 0 && volume <= 1) {
-                    video.volume = volume
+                this.setVideoVolume(volume)
+            },
+            setVideoVolume(volume) {
+                const video = document.querySelector('#video')
+                if (volume > 1) {
+                    volume = 1
+                } else if (volume < 0) {
+                    volume = 0
                 }
+                video.volume = volume
             },
             formatSeconds(seconds) {
                 seconds = parseInt(seconds)
