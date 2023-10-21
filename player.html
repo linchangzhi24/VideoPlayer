@@ -325,6 +325,8 @@
                 }
             },
             setVideoSource(i) {
+                if (this.playIndex == i) return
+
                 this.clearVideoSource()
 
                 this.isloading = true
