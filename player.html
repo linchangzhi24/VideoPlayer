@@ -23,7 +23,8 @@
                             <div class="player-progress-schedule" @click="progressJumpTo($event)">
                                 <div class="player-progress-buffer" style="transform: scaleX(1);"></div>
                                 <div class="player-progress-current"
-                                    :style="{ transform: `scaleX(${currentTime / duration})` }"></div>
+                                    :style="{ transform: `scaleX(${duration != 0 ? currentTime / duration : 0})` }">
+                                </div>
                             </div>
                         </div>
                         <!-- control -->
@@ -94,8 +95,32 @@
                             </div>
                         </div>
                     </div>
+                    <!-- loading -->
+                    <div class="mask-container" v-show="isloading">
+                        <div class="loader">
+                            <div data-glitch="Loading..." class="glitch">Loading...</div>
+                        </div>
+                    </div>
                 </div>
             </div>
+            <div class="right-container">
+                <div class="catalog-container">
+                    <div class="catalog-list">
+                        <div class="catalog-col-box" :class="{ 'catalog-col-seleted': playIndex == index }"
+                            v-for="(file, index) in files" @click="setVideoSource(index)">
+                            <div class="catalog-col">{{ file.name.split('.')[0] }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <label class="neon-btn">
+                <span class="span">
+                    <div data-glitch="打开视频..." class="glitch">打开视频...</div>
+                </span>
+                <input class="input-btn" type="file" @change="selectFolder($event)" multiple>
+            </label>
         </div>
     </div>
 </body>
@@ -112,6 +137,10 @@
             const videoPaused = ref(true)
             const fullscreenState = ref(false)
             const ctrlDisplay = ref(false)
+            const files = ref(new Array())
+            const playIndex = ref(null)
+            const canplay = ref(false)
+            const isloading = ref(false)
 
             return {
                 videoPath,
@@ -121,6 +150,10 @@
                 videoPaused,
                 fullscreenState,
                 ctrlDisplay,
+                files,
+                playIndex,
+                canplay,
+                isloading,
             }
         },
         methods: {
@@ -156,6 +189,11 @@
                         vm.ctrlDisplay = false
                     }, 1000)
                 }
+                video.oncanplay = (event) => {
+                    this.canplay = true
+                    this.isloading = false
+                    this.videoPlay()
+                };
             },
             documentEvents() {
                 const video = document.querySelector('#video')
@@ -184,7 +222,7 @@
                         return false
                     } else if (e && e.keyCode === 32) {
                         // space
-                        video.paused === true ? video.play() : video.pause()
+                        video.paused === true ? this.videoPlay() : this.videoPause()
                         return false
                     }
                 }
@@ -205,7 +243,9 @@
             },
             videoPlay() {
                 const video = document.querySelector('#video')
-                video.play()
+                if (this.canplay) {
+                    video.play()
+                }
             },
             videoPause() {
                 const video = document.querySelector('#video')
@@ -217,7 +257,7 @@
             },
             dotMousedown(event) {
                 const volumeProgressBar = document.querySelector('#volumeProgressBar')
-                
+
                 const volume = (1 - event.offsetY / volumeProgressBar.offsetHeight).toFixed(2)
                 this.setVideoVolume(volume)
 
@@ -262,10 +302,50 @@
                 }
 
                 return result
-            }
+            },
+            selectFolder(event) {
+                if (event.target.files.length > 0) {
+                    this.clearVideoSource()
+
+                    var fileList = event.target.files;
+
+                    this.files = new Array()
+
+                    for (file of fileList) {
+                        this.files.push(file)
+                    }
+
+                    this.files.sort(
+                        (a, b) => {
+                            return a.name.split('.')[0] - b.name.split('.')[0]
+                        }
+                    )
+                }
+            },
+            setVideoSource(i) {
+                this.clearVideoSource()
+
+                this.isloading = true
+                this.playIndex = i
+
+                let reader = new FileReader()
+                reader.readAsDataURL(this.files[i])
+                reader.onload = function () {
+                    document.querySelector('#video').src = reader.result
+                }
+            },
+            clearVideoSource() {
+                this.videoPause()
+                document.querySelector('#video').src = ''
+                this.videoPath = ''
+                this.videoPaused = true
+                this.duration = 0
+                this.currentTime = 0
+                this.canplay = false
+                this.playIndex = null
+            },
         },
         mounted() {
-            this.videoPath = ""
             this.playerEvents()
             this.documentEvents()
         },
