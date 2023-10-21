@@ -328,11 +328,9 @@
                 this.isloading = true
                 this.playIndex = i
 
-                let reader = new FileReader()
-                reader.readAsDataURL(this.files[i])
-                reader.onload = function () {
-                    document.querySelector('#video').src = reader.result
-                }
+                URL.revokeObjectURL(this.videoPath);
+                const objectURL = URL.createObjectURL(this.files[i]);
+                this.videoPath = objectURL
             },
             clearVideoSource() {
                 this.videoPause()
