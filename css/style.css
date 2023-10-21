@@ -27,6 +27,31 @@ body {
     word-wrap: break-word;
     word-break: break-word;
     color: var(--white);
+
+    scrollbar-color: #444550 transparent;
+    scrollbar-base-color: #222225;
+    scrollbar-face-color: #555;
+    scrollbar-arrow-color: #000;
+    scrollbar-3dlight-color: #555;
+    scrollbar-highlight-color: #555;
+    scrollbar-shadow-color: #555;
+    scrollbar-darkshadow-color: #555;
+    scrollbar-track-color: #333338
+}
+
+body::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+    background: transparent
+}
+
+body::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, .2);
+    border-radius: 16px
+}
+
+body::-webkit-scrollbar-track {
+    background: transparent
 }
 
 video {
@@ -36,6 +61,22 @@ video {
 
 video::media-controls {
     display: none !important;
+}
+
+.layout-header,
+.head_placeholder {
+    height: 64px;
+}
+
+.layout-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    z-index: 1;
+    background: var(--dark);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, .08);
 }
 
 .content {
