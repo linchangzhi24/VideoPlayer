@@ -106,9 +106,11 @@
             <div class="right-container">
                 <div class="catalog-container">
                     <div class="catalog-list">
-                        <div class="catalog-col-box" :class="{ 'catalog-col-seleted': playIndex == index }"
-                            v-for="(file, index) in files" @click="setVideoSource(index)">
-                            <div class="catalog-col">{{ file.name.split('.')[0] }}</div>
+                        <div class="catalog-col-box" v-for="(file, index) in files" @click="setVideoSource(index)"
+                            :class="[{ 'catalog-col-seleted': playIndex == index }, file.name.length > 7 ? 'catalog-col-box-wide' : 'catalog-col-box-narrow']">
+                            <div class="catalog-col">
+                                {{ file.name.length > 7 ? file.name : file.name.split('.')[0] }}
+                            </div>
                         </div>
                     </div>
                 </div>
