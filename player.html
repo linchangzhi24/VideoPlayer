@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="icon.png" type="image/png"> 
+    <link rel="icon" href="icon.png" type="image/png">
     <script src="./package/vue/unpkg.com_vue@3.3.4_dist_vue.global.js"></script>
     <link href="./css/style.css" rel="stylesheet">
     <link href="./css/vue_style.css" rel="stylesheet">
@@ -229,6 +229,10 @@
                         // space
                         video.paused === true ? this.videoPlay() : this.videoPause()
                         return false
+                    } else if (e && e.keyCode === 80) {
+                        // p
+                        this.screenshot()
+                        return false
                     }
                 }
 
@@ -348,6 +352,36 @@
                 this.currentTime = 0
                 this.canplay = false
                 this.playIndex = null
+            },
+            screenshot() {
+                const canvas = document.createElement('canvas')
+                const ctx = canvas.getContext('2d')
+
+                const ratio = window.devicePixelRatio
+
+                const video = document.querySelector('#video')
+                canvas.width = video.videoWidth * ratio
+                canvas.height = video.videoHeight * ratio
+
+                ctx.drawImage(video, 0, 0, canvas.width, canvas.height)
+
+                const imgName = 'screenshot_' + this.files[this.playIndex].name.replaceAll('.', '_') + '-' + Number.parseInt(this.currentTime)
+                this.downloadImage(canvas, imgName)
+            },
+            downloadImage(canvas, name) {
+                let image = new Image();
+                image.setAttribute("crossOrigin", "anonymous");
+
+                let imgUrl = canvas.toDataURL("image/png");
+                image.src = imgUrl;
+
+                let a = document.createElement("a");
+                a.download = name || "screenshot_" + new Date().getTime();
+                a.href = imgUrl;
+                a.setAttribute("id", "link");
+
+                let event = new MouseEvent("click");
+                a.dispatchEvent(event);
             },
         },
         mounted() {
