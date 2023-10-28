@@ -7,8 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="icon.png" type="image/png">
     <script src="./package/vue/unpkg.com_vue@3.3.4_dist_vue.global.js"></script>
-    <link href="./css/style.css" rel="stylesheet">
-    <link href="./css/vue_style.css" rel="stylesheet">
+    <link href="./css/video-player.css" rel="stylesheet">
     <title>🎞️</title>
 </head>
 
@@ -320,7 +319,7 @@
 
                     this.files = new Array()
 
-                    for (file of fileList) {
+                    for (let file of fileList) {
                         this.files.push(file)
                     }
 
