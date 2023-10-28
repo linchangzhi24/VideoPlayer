@@ -148,8 +148,6 @@ export default {
     },
     methods: {
         playerEvents() {
-            const vm = this
-
             let fadeTimer
 
             const video = document.querySelector('#video')
@@ -192,29 +190,27 @@ export default {
             const timeChangeSize = 5
 
             document.onkeydown = (event) => {
-                const e = event || window.event || arguments.callee.caller.arguments[0]
-
-                if (e && e.keyCode === 38) {
+                if (event && event.key === 'ArrowUp') {
                     // ↑
                     1 - video.volume >= volumeChangeSize ? video.volume += volumeChangeSize : video.volume = 1
                     return false
-                } else if (e && e.keyCode === 40) {
+                } else if (event && event.key === 'ArrowDown') {
                     // ↓
                     video.volume >= volumeChangeSize ? video.volume -= volumeChangeSize : video.volume = 0
                     return false
-                } else if (e && e.keyCode === 37) {
+                } else if (event && event.key === 'ArrowLeft') {
                     // ←
                     video.currentTime !== 0 ? video.currentTime -= timeChangeSize : 1
                     return false
-                } else if (e && e.keyCode === 39) {
+                } else if (event && event.key === 'ArrowRight') {
                     // →
                     video.currentTime !== video.duration ? video.currentTime += timeChangeSize : 1
                     return false
-                } else if (e && e.keyCode === 32) {
+                } else if (event && event.key === ' ') {
                     // space
                     video.paused === true ? this.videoPlay() : this.videoPause()
                     return false
-                } else if (e && e.keyCode === 80) {
+                } else if (event && event.key === 'p') {
                     // p
                     this.screenshot()
                     return false
@@ -222,7 +218,7 @@ export default {
             }
 
             document.onfullscreenchange = (event) => {
-                this.fullscreenState = document.fullscreen
+                this.fullscreenState = document.fullscreenElement != null
             }
         },
         enterFullscreen() {
@@ -233,7 +229,7 @@ export default {
             document.exitFullscreen()
         },
         autoFullscreen() {
-            document.fullscreen ? this.exitFullscreen() : this.enterFullscreen()
+            document.fullscreenElement != null ? this.exitFullscreen() : this.enterFullscreen()
         },
         videoPlay() {
             const video = document.querySelector('#video')
