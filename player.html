@@ -36,11 +36,11 @@
                                     <!-- play pause -->
                                     <div class="player-ctrl-btn">
                                         <Transition name="slide-fade">
-                                            <img height="22" src="./img/icon-player-paused.svg" v-show="videoPaused"
+                                            <img height="22" src="./icons/icon-player-paused.svg" v-show="videoPaused"
                                                 @click.stop="videoPlay()" />
                                         </Transition>
                                         <Transition name="slide-fade">
-                                            <img height="22" src="./img/icon-player-playing.svg" v-show="!videoPaused"
+                                            <img height="22" src="./icons/icon-player-playing.svg" v-show="!videoPaused"
                                                 @click.stop="videoPause()" />
                                         </Transition>
                                     </div>
@@ -55,11 +55,11 @@
                                     <!-- volume -->
                                     <div class="player-ctrl-btn player-ctrl-volume-icon">
                                         <Transition name="slide-fade">
-                                            <img height="22" src="./img/icon-player-volume.svg"
+                                            <img height="22" src="./icons/icon-player-volume.svg"
                                                 v-show="currentVolume > 0" />
                                         </Transition>
                                         <Transition name="slide-fade">
-                                            <img height="22" src="./img/icon-player-volume-mute.svg"
+                                            <img height="22" src="./icons/icon-player-volume-mute.svg"
                                                 v-show="currentVolume == 0" />
                                         </Transition>
                                         <!-- volume progress bar -->
@@ -85,11 +85,11 @@
                                     <!-- fullscreen -->
                                     <div class="player-ctrl-btn">
                                         <Transition name="slide-fade">
-                                            <img height="22" src="./img/icon-exit-full-screen.svg"
+                                            <img height="22" src="./icons/icon-exit-full-screen.svg"
                                                 v-show="fullscreenState" @click.stop="exitFullscreen()" />
                                         </Transition>
                                         <Transition name="slide-fade">
-                                            <img height="22" src="./img/icon-full-screen.svg" v-show="!fullscreenState"
+                                            <img height="22" src="./icons/icon-full-screen.svg" v-show="!fullscreenState"
                                                 @click.stop="enterFullscreen()" />
                                         </Transition>
                                     </div>
